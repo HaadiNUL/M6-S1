@@ -1,55 +1,66 @@
 import random
 
-def generate_equation():
-    """
-    Generates a simple arithmetic equation with one unknown 'x'.
-    This function randomly selects numbers and an operator, computes the result,
-    and formats it as an equation of the form 'a op x = result'.
+def make_arithmetic_problem():
+    # This function generates an arithmetic equation where we solve for 'x'.
+    # It randomly chooses numbers and an operator, then formats the equation.
+    # Example output: "5 + x = 10", with 'x' being 5.
     
-    Returns:
-        tuple: A tuple containing the formatted equation (str) and the correct value of 'x' (int).
-    """
-    operators = ['+', '-', '*']
-    a = random.randint(1, 10)
-    b = random.randint(1, 10)
-    op = random.choice(operators)
-
-    if op == '+':
-        result = a + b
-    elif op == '-':
-        result = a - b
+    operators = ['+', '-', '*']  # Keeping it simple for now
+    num1 = random.randint(1, 10)
+    num2 = random.randint(1, 10)
+    chosen_op = random.choice(operators)  # Pick an operator randomly
+    
+    # Determine the result based on the chosen operation
+    if chosen_op == '+':
+        result = num1 + num2
+    elif chosen_op == '-':
+        result = num1 - num2
+    elif chosen_op == '*':
+        result = num1 * num2
     else:
-        result = a * b
+        # This shouldn't happen, but better safe than sorry
+        raise ValueError("Unexpected operator!")
+    
+    # Creating the formatted equation string
+    equation = f"{num1} {chosen_op} x = {result}"
+    return equation, num2  # Return the problem and the correct answer for 'x'
 
-    equation = f"{a} {op} x = {result}"
-    return equation, b
-
-def main():
+def run_math_quiz():
     """
-    Main function to conduct a math quiz. Generates equations, takes user input,
-    and checks answers, tracking the total score.
+    Main logic for running the math quiz.
+    The user will be prompted with math problems, and their answers will be checked.
     """
-    score = 0
-    num_questions = 5
+    print("Welcome to the Math Quiz!")
+    print("Your goal: Solve for 'x' in each equation.")
 
-    print("Welcome to the Math Quiz! Please solve for x in each equation.")
-
-    for i in range(1, num_questions + 1):
-        print(f"\nQuestion {i}:")
-        equation, correct_answer = generate_equation()
+    total_score = 0
+    total_questions = 5  # Let's keep the quiz short and sweet
+    
+    for question_num in range(1, total_questions + 1):
+        print(f"\nQuestion {question_num}:")
+        
+        # Generate a math problem
+        equation, correct_x = make_arithmetic_problem()
         print(equation)
         
         try:
-            user_answer = int(input("Your answer for x: "))
-            if user_answer == correct_answer:
-                print("Correct!")
-                score += 1
+            user_input = input("Enter your answer for x: ").strip()
+            user_answer = int(user_input)  # Convert to integer
+            
+            # Check if the answer is correct
+            if user_answer == correct_x:
+                print("Correct! Nicely done!")
+                total_score += 1
             else:
-                print(f"Wrong! The correct answer was: {correct_answer}")
+                print(f"Oops, not quite. The correct answer was {correct_x}.")
         except ValueError:
-            print("Invalid input; please enter a valid integer.")
+            # Handle cases where input isn't a valid integer
+            print("Hmm, that doesn't look like a number. Remember to type an integer!")
+    
+    # Wrap up the quiz
+    print(f"\nThat's the end of the quiz! You scored {total_score} out of {total_questions}.")
+    print("Thanks for playing. Come back to try again!")
 
-    print(f"\nGame over! Your total score is: {score} out of {num_questions}")
-
-if __name__ == "__main__":
-    main()
+# Only run the quiz if this script is executed directly
+if __name__ == '__main__':
+    run_math_quiz()
